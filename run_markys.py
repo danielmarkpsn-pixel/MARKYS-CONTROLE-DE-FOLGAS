@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-APP_TITLE = "MARKYS - Controle de Folgas"
+APP_TITLE = "MARKYS - CONTROLE DE FOLGAS OFICIAL"
 APP_USER_MODEL_ID = "MARKYS.ControleDeFolgas"
 HOST = os.getenv("MARKYS_HOST", "127.0.0.1")
 PORT = int(os.getenv("MARKYS_PORT", "8000"))
