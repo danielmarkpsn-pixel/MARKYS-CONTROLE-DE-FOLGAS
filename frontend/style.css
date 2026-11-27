@@ -439,3 +439,7 @@ a,.lock-icon{color:#2869b2}
 #sidebar-toggle{padding:6px 10px}
 @media(min-width:901px){body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:76px minmax(0,1fr)}.sidebar-collapsed .sidebar-profile strong,.sidebar-collapsed .sidebar-footer{display:none}.sidebar-collapsed .sidebar-dropdown summary{font-size:0}.sidebar-collapsed .app-sidebar .tab{font-size:0;justify-content:center;padding:10px}.sidebar-collapsed .sidebar-profile{padding:0;justify-content:center}}
 @media(max-width:900px){.sidebar-collapsed .app-sidebar>:not(.sidebar-profile){display:none}.workspace{padding:14px}}
+
+/* Alternância explícita entre os modos de cadastro */
+#employees #employee-form.hidden,#employees #batch-import.hidden{display:none!important}
+#employees #batch-import:not(.hidden){display:block!important}
