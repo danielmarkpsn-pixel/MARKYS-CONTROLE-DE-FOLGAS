@@ -91,7 +91,12 @@ async function refresh() {
   if($("#employee-expired-table"))table("#employee-expired-table",["Descrição","Data do evento","Data de validade","Quantidade"],employeeGrants.filter(g=>g.expired).map(g=>[g.description||g.leave_type,g.event_date,g.valid_until,g.available_amount]));
   if($("#available-table"))table("#available-table",["Nome","Categoria","Quantidade de folgas"],balances.map(b=>[b.employee,b.leave_type,Number(b.balance).toLocaleString("pt-BR")]));
   const now=new Date();const today=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");
-  const todays=history.filter(h=>h.leave_date===today);
+  const dashboardHistory=await api("/api/history");
+  const todays=dashboardHistory.filter(h=>h.leave_date===today);
+  const offIds=new Set(todays.map(h=>Number(h.employee_id)));
+  $("#metric-total").textContent=employees.length;
+  $("#metric-active").textContent=employees.filter(e=>e.active&&!offIds.has(Number(e.id))).length;
+  $("#metric-month").textContent=dashboardHistory.filter(h=>String(h.leave_date).startsWith(today.slice(0,7))).length;
   if($("#today-leaves"))$("#today-leaves").innerHTML=todays.length?todays.map(x=>'<article class="person-row"><span class="person-avatar">'+esc((x.employee||"?").trim().charAt(0).toUpperCase())+'</span><div><strong>'+esc(x.employee)+'</strong><small>'+esc(x.category||"Equipe")+' · '+esc(x.shift||"Folga")+'</small></div><span class="person-tag">De folga</span></article>').join(""):'<div class="dashboard-empty"><span>✓</span><strong>Nenhuma folga programada para hoje</strong><p>Todos os funcionários estão disponíveis.</p></div>';
   const birthdays=employees.filter(e=>e.active&&e.birth_date&&e.birth_date.slice(5)===today.slice(5)).sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
   if($("#today-birthdays"))$("#today-birthdays").innerHTML=birthdays.length?birthdays.map(x=>'<article class="person-row birthday-row"><span class="person-avatar birthday-avatar">🎉</span><div><strong>'+esc(x.name)+'</strong><small>'+esc(x.category||"Nossa equipe")+'</small><p class="birthday-message">🎂 Parabéns pelo seu dia! Que seu novo ciclo seja repleto de saúde, alegria e conquistas!</p></div></article>').join(""):'<div class="dashboard-empty"><span>🎂</span><strong>Nenhum aniversariante hoje</strong><p>Quando houver aniversário, a comemoração aparecerá aqui.</p></div>';
