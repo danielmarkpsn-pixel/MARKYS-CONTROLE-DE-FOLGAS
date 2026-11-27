@@ -218,26 +218,3 @@ document.addEventListener("input",ev=>{const el=ev.target;if(!(el instanceof HTM
 const iconPaths={home:'<path d="M3 10 12 3l9 7v10H3z"/><path d="M9 20v-7h6v7"/>',users:'<circle cx="9" cy="7" r="3"/><path d="M2 20v-3a7 7 0 0 1 14 0v3M17 4a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/>',gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8C3 8 5 0 9 4l3 4c9 0 7-8 3-4z"/>'};
 document.querySelectorAll("[data-icon]").forEach(el=>{el.innerHTML='<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+iconPaths[el.dataset.icon]+'</svg>';});
 $("#sidebar-toggle")?.addEventListener("click",()=>{const collapsed=document.body.classList.toggle("sidebar-collapsed");$("#sidebar-toggle").setAttribute("aria-expanded",String(!collapsed));$("#sidebar-toggle").setAttribute("aria-label",collapsed?"Expandir menu":"Recolher menu");});
-var validatedFile=null;
-function resetBatch(){validatedFile=null;$("#batch-confirm").disabled=true;$("#batch-status").textContent="";$("#batch-errors").replaceChildren();$("#batch-table").replaceChildren();}
-function setEmployeeMode(batch){$("#batch-import").classList.toggle("hidden",!batch);$("#employee-form").classList.toggle("hidden",batch);$("#batch-mode").classList.toggle("secondary",!batch);$("#individual-mode").classList.toggle("secondary",batch);}
-$("#individual-mode").addEventListener("click",()=>setEmployeeMode(false));
-$("#batch-mode").addEventListener("click",()=>{if(window.__role!=="admin"){alert("A importação exige acesso de administrador.");return;}setEmployeeMode(true);$("#batch-import").scrollIntoView({block:"start",behavior:"smooth"});});
-$("#employee-edit-selected").addEventListener("click",()=>setEmployeeMode(false));
-$("#batch-file").addEventListener("change",resetBatch);
-async function importBatch(confirm){
- const file=$("#batch-file").files[0];if(!file||confirm&&file!==validatedFile)return;
- $("#batch-preview").disabled=true;$("#batch-confirm").disabled=true;$("#batch-file").disabled=true;
- try{
- const response=await fetch("/api/employee-import?confirm="+confirm,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/octet-stream"},body:file});
- const data=await response.json();if(!response.ok)throw Error(data.detail||"Falha na importação");
- $("#batch-status").textContent=confirm&&data.created?data.created+" funcionários cadastrados.":data.count+" válidos; "+data.errors.length+" erros. Prévia: até 100 registros.";
- $("#batch-errors").replaceChildren(...data.errors.map(e=>{const p=document.createElement("p");p.className="error";p.textContent="Linha "+e.line+": "+e.message;return p;}));
- table("#batch-table",["Nome","Nascimento","Categoria","Carga","Turno","Matrícula"],data.preview.map(p=>[p.name,p.birth_date,p.category,p.weekly_hours,p.shift,p.registration]));
- validatedFile=!confirm&&!data.errors.length&&data.count?file:null;
- if(data.created){$("#batch-file").value="";await refresh();}
- }catch(e){validatedFile=null;$("#batch-status").textContent=e.message;}
- finally{$("#batch-preview").disabled=false;$("#batch-file").disabled=false;$("#batch-confirm").disabled=!validatedFile;}
-}
-$("#batch-preview").addEventListener("click",()=>importBatch(false));
-$("#batch-confirm").addEventListener("click",()=>importBatch(true));
