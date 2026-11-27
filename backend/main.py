@@ -441,8 +441,7 @@ def get_employee(employee_id: int, user: User = Depends(admin_user), db: Session
 
 IMPORT_HEADERS = ("NOME", "NASCIMENTO", "CATEGORIA", "CARGA SEMANAL", "TURNO", "MATRÍCULA")
 
-@app.get("/api/employee-import/template")
-def employee_import_template(user: User = Depends(admin_user)):
+def build_employee_template():
     book = Workbook()
     sheet = book.active
     sheet.title = "Funcionários"
@@ -456,7 +455,11 @@ def employee_import_template(user: User = Depends(admin_user)):
     output = io.BytesIO()
     book.save(output)
     output.seek(0)
-    return StreamingResponse(output, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition": "attachment; filename=funcionarios-modelo.xlsx"})
+    return output
+
+@app.get("/api/employee-import/template")
+def employee_import_template(user: User = Depends(admin_user)):
+    return StreamingResponse(build_employee_template(), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition": "attachment; filename=funcionarios-modelo.xlsx"})
 
 @app.post("/api/employee-import")
 async def employee_import(request: Request, confirm: bool = False, user: User = Depends(admin_user), db: Session = Depends(get_db)):
