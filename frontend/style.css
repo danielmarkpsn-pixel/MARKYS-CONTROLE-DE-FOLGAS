@@ -443,3 +443,36 @@ a,.lock-icon{color:#2869b2}
 /* Alternância explícita entre os modos de cadastro */
 #employees #employee-form.hidden,#employees #batch-import.hidden{display:none!important}
 #employees #batch-import:not(.hidden){display:block!important}
+
+/* Identidade visual 0.6: temas claro e escuro */
+:root{--bg:#f5f7fa;--surface:#fff;--surface2:#f8fafc;--ink:#182338;--muted:#64748b;--line:#e0e5ed;--accent:#3869b4;--selected:#eaf1fc;--shadow:0 2px 8px #18233808;color-scheme:light}
+:root[data-theme="dark"]{--bg:#101827;--surface:#192435;--surface2:#202c3e;--ink:#e6edf7;--muted:#a2b1c6;--line:#303e53;--accent:#8bb7ff;--selected:#253d65;--shadow:0 2px 10px #0002;color-scheme:dark}
+html,body,body:has(#app-content:not(.hidden)){background:var(--bg);color:var(--ink)}
+header,body:has(#app-content:not(.hidden))>header{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);box-shadow:none;min-height:58px}
+body:has(#app-content:not(.hidden)) .app-sidebar,.app-sidebar{background:var(--surface);color:var(--ink);border-right:1px solid var(--line);box-shadow:none}
+body:has(#app-content:not(.hidden)) main{grid-template-columns:210px minmax(0,1fr)}
+body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:64px minmax(0,1fr)}
+.workspace{padding:24px;min-width:0}
+.app-sidebar .tab,.app-sidebar summary,.sidebar-profile,.sidebar-footer{color:var(--muted);border-color:var(--line)}
+.app-sidebar .tab.active,.app-sidebar .tab:hover{background:var(--selected);color:var(--accent);border-color:var(--line)}
+.panel,.workspace .panel,.dashboard-card,fieldset,#employees #employee-form fieldset,.login-panel,.registration-area,.inline-help,.leave-view-panel,.leave-employee-picker,#batch-import,.table-wrap{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:var(--shadow)}
+#dashboard{background:transparent;border:0;box-shadow:none;padding:0}
+.dashboard-welcome{background:transparent;border:0;box-shadow:none;padding:8px 0 18px;color:var(--ink)}
+.dashboard-welcome h2,.dashboard-card h2,h1,h2,h3,legend,strong{color:var(--ink)}
+.dashboard-welcome p,.dashboard-card-heading p,.dashboard-empty p,.person-row small,label,.caption,.eyebrow{color:var(--muted)}
+.dashboard-unit-label{display:inline-block;background:var(--selected);color:var(--accent)!important;border:1px solid var(--line);border-radius:20px;padding:5px 10px}
+.daily-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 16px}
+.daily-metrics article{display:grid;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:var(--shadow)}
+.daily-metrics span{font-size:12px;color:var(--muted)}.daily-metrics strong{font-size:25px;line-height:1.1}.daily-metrics small{font-size:11px;color:var(--muted)}
+.dashboard-halves{gap:16px}.dashboard-card{border-radius:10px;min-height:260px}.dashboard-card-heading,.person-row{background:transparent;border-color:var(--line);color:var(--ink)}
+.dashboard-empty{color:var(--ink)}.dashboard-empty span,.dashboard-icon,.person-avatar{background:var(--selected);color:var(--accent)}
+input,select,textarea,button.secondary,.status,.leave-view{background:var(--surface2);color:var(--ink);border-color:var(--line)}
+input::placeholder,textarea::placeholder{color:var(--muted)}table,td,th,tr{border-color:var(--line);color:var(--ink)}th,thead,tr:nth-child(even){background:var(--surface2)}td{background:transparent}
+.leave-view.active{background:var(--selected);color:var(--accent)}a{color:var(--accent)}
+#theme-toggle{position:relative;display:inline-flex;align-items:center;justify-content:flex-end;width:66px;height:28px;min-height:28px;padding:0 7px;border-radius:30px;border:1px solid #a83038;background:#b83240;color:white;font-size:10px;font-weight:700;box-shadow:none}
+#theme-toggle .theme-knob{position:absolute;left:3px;width:20px;height:20px;border-radius:50%;background:white;transition:transform .18s}
+[data-theme="dark"] #theme-toggle{background:#23794d;border-color:#23794d;justify-content:flex-start}
+[data-theme="dark"] #theme-toggle .theme-knob{transform:translateX(38px)}
+[data-theme="dark"] .brand-logo,[data-theme="dark"] .login-logo{background:#fff;border-radius:6px;padding:4px}
+.hidden{display:none!important}
+@media(max-width:900px){body:has(#app-content:not(.hidden)) main,body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:1fr}.workspace{padding:14px}.daily-metrics{gap:8px}.daily-metrics article{padding:10px}}
