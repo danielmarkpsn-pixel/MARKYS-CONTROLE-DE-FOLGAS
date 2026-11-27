@@ -59,7 +59,7 @@ if initial_password:
     )
 
 import uvicorn
-from backend.main import app, hash_password
+from backend.main import app, hash_password, build_employee_template
 from backend.database import SessionLocal
 from backend.models import User, LoginAttempt
 from sqlalchemy import select
@@ -138,6 +138,26 @@ def run_server_only() -> None:
                 access_log=False, log_config=None)
 
 
+class DesktopApi:
+    def save_employee_template(self):
+        import webview
+        try:
+            dialog = getattr(webview, "FileDialog", None)
+            save_type = dialog.SAVE if dialog else webview.SAVE_DIALOG
+            selected = webview.windows[0].create_file_dialog(
+                save_type, save_filename="funcionarios-modelo.xlsx",
+                file_types=("Planilha Excel (*.xlsx)",))
+            if not selected:
+                return {"cancelled": True}
+            path = Path(selected[0] if isinstance(selected, (list, tuple)) else selected)
+            if path.suffix.lower() != ".xlsx":
+                path = path.with_suffix(".xlsx")
+            path.write_bytes(build_employee_template().getvalue())
+            return {"saved": True, "path": str(path)}
+        except Exception as exc:
+            return {"error": str(exc)}
+
+
 def run_desktop() -> None:
     if sys.platform == "win32":
         try:
@@ -169,6 +189,7 @@ def run_desktop() -> None:
             height=850,
             min_size=(960, 640),
             text_select=True,
+            js_api=DesktopApi(),
         )
         # A janela desktop é a interface principal; não abre uma aba do navegador.
         webview.start(debug=False)
