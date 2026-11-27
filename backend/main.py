@@ -5,6 +5,9 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
 from fastapi import Depends, FastAPI, HTTPException, Request
+from openpyxl import Workbook, load_workbook
+from zipfile import ZipFile
+from pydantic import ValidationError
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -435,6 +438,94 @@ def get_employee(employee_id: int, user: User = Depends(admin_user), db: Session
     item = db.get(Employee, employee_id)
     if not item: raise HTTPException(404, "Funcionário não encontrado.")
     return employee_private(item)
+
+IMPORT_HEADERS = ("NOME", "NASCIMENTO", "CATEGORIA", "CARGA SEMANAL", "TURNO", "MATRÍCULA")
+
+@app.get("/api/employee-import/template")
+def employee_import_template(user: User = Depends(admin_user)):
+    book = Workbook()
+    sheet = book.active
+    sheet.title = "Funcionários"
+    sheet.append(IMPORT_HEADERS)
+    sheet.freeze_panes = "A2"
+    for column, width in zip("ABCDEF", (42, 20, 32, 20, 20, 22)):
+        sheet.column_dimensions[column].width = width
+    for row in range(2, 1002):
+        sheet.cell(row, 6).number_format = "@"
+        sheet.cell(row, 2).number_format = "dd/mm/yyyy"
+    output = io.BytesIO()
+    book.save(output)
+    output.seek(0)
+    return StreamingResponse(output, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition": "attachment; filename=funcionarios-modelo.xlsx"})
+
+@app.post("/api/employee-import")
+async def employee_import(request: Request, confirm: bool = False, user: User = Depends(admin_user), db: Session = Depends(get_db)):
+    raw = bytearray()
+    async for chunk in request.stream():
+        raw.extend(chunk)
+        if len(raw) > 5 * 1024 * 1024:
+            raise HTTPException(413, "Planilha acima de 5 MB.")
+    try:
+        with ZipFile(io.BytesIO(raw)) as archive:
+            if sum(i.file_size for i in archive.infolist()) > 50 * 1024 * 1024:
+                raise ValueError("Arquivo muito grande")
+        book = load_workbook(io.BytesIO(raw), read_only=True, data_only=False)
+    except Exception:
+        raise HTTPException(422, "Selecione uma planilha XLSX válida.")
+    rows, errors = [], []
+    existing = db.scalars(select(Employee)).all()
+    registrations = {str(e.registration).strip().upper() for e in existing if e.registration}
+    identities = {(e.name.strip().upper(), e.birth_date) for e in existing}
+    try:
+        sheet = book.active
+        iterator = sheet.iter_rows(values_only=True, max_col=6)
+        if tuple(next(iterator, ())) != IMPORT_HEADERS:
+            raise HTTPException(422, "Use os cabeçalhos da planilha modelo.")
+        for line, cells in enumerate(iterator, 2):
+            if line > 10001:
+                raise HTTPException(422, "Limite de 10.000 linhas por arquivo.")
+            if all(v is None or v == "" for v in cells):
+                continue
+            try:
+                if any(isinstance(v, str) and v.startswith("=") for v in cells):
+                    raise ValueError("Fórmulas não são permitidas.")
+                name, birth, category, hours, shift, registration = cells
+                name, category, shift = [str(v or "").strip().upper() for v in (name, category, shift)]
+                registration = str(registration).strip().upper() if registration is not None else None
+                registration = registration or None
+                if isinstance(birth, datetime):
+                    birth = birth.date()
+                elif isinstance(birth, str):
+                    birth = datetime.strptime(birth.strip(), "%d/%m/%Y").date()
+                if not isinstance(birth, date) or birth > date.today():
+                    raise ValueError("Data de nascimento inválida.")
+                if not category or shift not in {"MANHÃ", "TARDE", "NOITE", "INTEGRAL"}:
+                    raise ValueError("Informe categoria e turno válido.")
+                if isinstance(hours, bool) or float(hours) != int(float(hours)) or not 1 <= int(float(hours)) <= 60:
+                    raise ValueError("Carga semanal deve ser inteira, de 1 a 60.")
+                payload = EmployeeIn(name=name, birth_date=birth, category=category, weekly_hours=str(int(float(hours))), shift=shift, registration=registration)
+                if registration and registration in registrations or (name, birth) in identities:
+                    raise ValueError("Possível funcionário duplicado.")
+                if registration:
+                    registrations.add(registration)
+                identities.add((name, birth))
+                rows.append(payload)
+            except (ValueError, TypeError, ValidationError, OverflowError) as exc:
+                errors.append({"line": line, "message": str(exc)})
+    finally:
+        book.close()
+    if confirm and not errors and rows:
+        try:
+            for payload in rows:
+                item = Employee(**payload.model_dump(), active=True)
+                db.add(item)
+                db.flush()
+                audit(db, request, "CREATE", "employee", item.id, item.name)
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(409, "Conflito de cadastro. Nenhum registro importado.")
+    return {"count": len(rows), "errors": errors, "created": len(rows) if confirm and not errors else 0, "preview": [p.model_dump(mode="json") for p in rows[:100]]}
 
 @app.post("/api/employees", status_code=201)
 def create_employee(payload: EmployeeIn, request: Request, user: User = Depends(admin_user), db: Session = Depends(get_db)):
