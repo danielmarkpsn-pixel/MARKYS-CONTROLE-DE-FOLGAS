@@ -414,3 +414,32 @@ a,.lock-icon{color:#2869b2}
 
 
 .dashboard-unit-label{display:inline-flex;align-items:center;width:max-content;margin:8px 0 4px;padding:7px 12px;border:1px solid #c9dff2;border-radius:999px;background:#eaf4fc;color:#245d91;font-size:12px;font-weight:800;letter-spacing:.04em}
+
+/* MARKYS Oficial — paleta pastel e formulários compactos */
+:root{--blue:#326da8;--navy:#23466d;--line:#dce6f0;--ink:#243b53;--muted:#526b83}
+.app-sidebar{background:#dbeafe!important;color:#23466d;border-right:1px solid #c6d9ee;box-shadow:none}
+.sidebar-profile,.sidebar-dropdown,.sidebar-footer{border-color:#bcd1e8}
+.sidebar-profile strong,.sidebar-dropdown summary,.sidebar-footer,.sidebar-dropdown summary:after{color:#365777}
+.app-sidebar .tab,.sidebar-dropdown .tab{color:#23466d;background:transparent;box-shadow:none}
+.app-sidebar .tab:hover,.sidebar-dropdown .tab:hover{background:#c9dff6;color:#173c64}
+.app-sidebar .tab.active,.sidebar-dropdown .tab.active{background:#b9d5f5;color:#173c64;box-shadow:inset 3px 0 #487db5}
+.nav-svg svg{width:20px;height:20px;display:block}.nav-svg{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.dashboard-icon.nav-svg svg{width:26px;height:26px}
+.dashboard-welcome{background:#eaf3ff!important;color:#23466d!important;border:1px solid #d1e3f5}
+.dashboard-welcome h2,.dashboard-welcome p{color:#23466d!important}
+.dashboard-card{background:white!important;border:1px solid #dce6f0;box-shadow:none}
+.today-card .dashboard-icon{background:#dbeafe;color:#285e91}.birthday-card .dashboard-icon{background:#dcfce7;color:#23734d}
+.workspace{padding:24px}.workspace h2{font-size:19px}
+#employees .form-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px 14px;margin:8px 0}
+#employees fieldset{padding:14px;margin-bottom:12px}
+#employees input,#employees select{padding:8px 10px;min-height:36px;font-size:13px}
+.employee-mode{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+#batch-import{padding:18px;border:1px solid #dce6f0;border-radius:12px;background:#f7fbff;margin-bottom:18px}
+#batch-import label{margin-top:14px}
+#sidebar-toggle{padding:6px 10px}
+@media(min-width:901px){body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:76px minmax(0,1fr)}.sidebar-collapsed .sidebar-profile strong,.sidebar-collapsed .sidebar-footer{display:none}.sidebar-collapsed .sidebar-dropdown summary{font-size:0}.sidebar-collapsed .app-sidebar .tab{font-size:0;justify-content:center;padding:10px}.sidebar-collapsed .sidebar-profile{padding:0;justify-content:center}}
+@media(max-width:900px){.sidebar-collapsed .app-sidebar>:not(.sidebar-profile){display:none}.workspace{padding:14px}}
+
+/* Alternância explícita entre os modos de cadastro */
+#employees #employee-form.hidden,#employees #batch-import.hidden{display:none!important}
+#employees #batch-import:not(.hidden){display:block!important}

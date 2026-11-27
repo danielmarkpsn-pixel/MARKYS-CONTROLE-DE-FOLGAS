@@ -1,6 +1,6 @@
 ; Buildado no Windows com Inno Setup 6 (ISCC.exe).
-#define AppName "MARKYS - Controle de Folgas"
-#define AppVersion "0.4.0"
+#define AppName "MARKYS - CONTROLE DE FOLGAS OFICIAL"
+#define AppVersion "0.5.0"
 #define AppPublisher "MARKYS"
 #define AppExeName "MARKYS.exe"
 
@@ -15,7 +15,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 ArchitecturesInstallIn64BitMode=x64
 OutputDir=..\dist-installer
-OutputBaseFilename=MARKYS-Controle-de-Folgas-Setup
+OutputBaseFilename=MARKYS-Controle-de-Folgas-Oficial-Setup
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -32,8 +32,8 @@ Source: "..\docs\USO-INSTALADOR.md"; DestDir: "{app}\docs"; Flags: ignoreversion
 Source: "..\docs\INSTALACAO-WINDOWS.md"; DestDir: "{app}\docs"; Flags: ignoreversion
 
 [Icons]
-Name: "{autodesktop}\MARKYS - Controle de Folgas"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{localappdata}\MARKYS"
-Name: "{autoprograms}\MARKYS - Controle de Folgas"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{localappdata}\MARKYS"
+Name: "{autodesktop}\MARKYS - CONTROLE DE FOLGAS OFICIAL"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{localappdata}\MARKYS"
+Name: "{autoprograms}\MARKYS - CONTROLE DE FOLGAS OFICIAL"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{localappdata}\MARKYS"
 Name: "{autoprograms}\MARKYS - Recuperar acesso"; Filename: "{app}\{#AppExeName}"; Parameters: "--reset-admin"; WorkingDir: "{localappdata}\MARKYS"; Comment: "Redefine a senha local sem apagar os dados"
 
 [Run]
