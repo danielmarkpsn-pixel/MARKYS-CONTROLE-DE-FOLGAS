@@ -60,7 +60,7 @@
 <section id="employees" class="panel">
 <div class="section-heading"><h2>Cadastro de funcionários</h2></div>
 <div class="employee-mode admin-only"><button type="button" id="individual-mode">Cadastro individual</button><button type="button" class="secondary" id="batch-mode">Cadastro em lote</button></div>
-<section id="batch-import" class="hidden admin-only"><h3>Importar funcionários por Excel</h3><p>Baixe o modelo, preencha os dados e confira antes de cadastrar. Corrija todos os erros para confirmar.</p><a href="/api/employee-import/template" download>Baixar planilha modelo (.xlsx)</a><label>Planilha preenchida<input type="file" id="batch-file" accept=".xlsx"></label><div class="form-actions"><button type="button" id="batch-preview">Validar planilha</button><button type="button" id="batch-confirm" disabled>Confirmar cadastro</button></div><p id="batch-status" role="status" aria-live="polite"></p><div id="batch-errors"></div><div id="batch-table" class="table-wrap"></div></section>
+<section id="batch-import" class="hidden"><h3>Importar funcionários por Excel</h3><p>Baixe o modelo, preencha os dados e confira antes de cadastrar. Corrija todos os erros para confirmar.</p><a href="/api/employee-import/template" download>Baixar planilha modelo (.xlsx)</a><label>Planilha preenchida<input type="file" id="batch-file" accept=".xlsx"></label><div class="form-actions"><button type="button" id="batch-preview">Validar planilha</button><button type="button" id="batch-confirm" disabled>Confirmar cadastro</button></div><p id="batch-status" role="status" aria-live="polite"></p><div id="batch-errors"></div><div id="batch-table" class="table-wrap"></div></section>
 <form id="employee-form">
 <input type="hidden" name="id" id="employee-id">
 
