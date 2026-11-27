@@ -61,7 +61,7 @@ async function boot() {
   const dashboardUnit=$("#dashboard-unit-label"); if(dashboardUnit) dashboardUnit.textContent="UNIDADE: "+unit.name;
   
   document.querySelectorAll(".admin-only").forEach(el=>el.classList.toggle("hidden",state.role!=="admin"));
-  if(state.authenticated) { setHomePanel(); await refresh(); }
+  if(state.authenticated) { setEmployeeMode(false); resetBatch(); $("#batch-file").value=""; setHomePanel(); await refresh(); }
 }
 async function refresh() {
  try {
