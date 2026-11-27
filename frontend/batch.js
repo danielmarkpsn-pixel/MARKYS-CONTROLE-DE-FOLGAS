@@ -22,3 +22,10 @@ async function importBatch(confirm){
 }
 document.querySelector("#batch-preview").addEventListener("click",()=>importBatch(false));
 document.querySelector("#batch-confirm").addEventListener("click",()=>importBatch(true));
+
+document.querySelector("#batch-download").addEventListener("click",async()=>{
+ const status=document.querySelector("#batch-status");const button=document.querySelector("#batch-download");button.disabled=true;
+ try{if(window.pywebview?.api?.save_employee_template){const result=await window.pywebview.api.save_employee_template();if(result.error)throw Error(result.error);status.textContent=result.saved?"Planilha salva em: "+result.path:"Download cancelado.";}
+ else{const response=await fetch("/api/employee-import/template",{credentials:"same-origin"});if(!response.ok)throw Error("Não foi possível gerar a planilha ("+response.status+").");const url=URL.createObjectURL(await response.blob());const link=document.createElement("a");link.href=url;link.download="funcionarios-modelo.xlsx";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);status.textContent="Download solicitado.";}}
+ catch(e){status.textContent="Erro ao salvar a planilha: "+e.message;}finally{button.disabled=false;}
+});
