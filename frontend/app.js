@@ -57,8 +57,8 @@ async function boot() {
   $("#login-panel").classList.toggle("hidden",state.authenticated);
   $("#app-content").classList.toggle("hidden",!state.authenticated);
   $("#logout").classList.toggle("hidden",!state.authenticated);
-  $("#status").textContent=unit.name+" • "+(state.authenticated ? "Conectado: "+state.username+" ("+state.role+")" : "Acesso restrito");
-  const dashboardUnit=$("#dashboard-unit-label"); if(dashboardUnit) dashboardUnit.textContent="UNIDADE: "+unit.name;
+  $("#status").textContent=state.authenticated ? state.username : "Acesso restrito";
+  const dashboardUnit=$("#dashboard-unit-label"); if(dashboardUnit) dashboardUnit.textContent=unit.name;
   
   document.querySelectorAll(".admin-only").forEach(el=>el.classList.toggle("hidden",state.role!=="admin"));
   if(state.authenticated) { setEmployeeMode(false); resetBatch(); $("#batch-file").value=""; setHomePanel(); await refresh(); }
@@ -97,9 +97,9 @@ async function refresh() {
   $("#metric-total").textContent=employees.length;
   $("#metric-active").textContent=employees.filter(e=>e.active&&!offIds.has(Number(e.id))).length;
   $("#metric-month").textContent=dashboardHistory.filter(h=>String(h.leave_date).startsWith(today.slice(0,7))).length;
-  if($("#today-leaves"))$("#today-leaves").innerHTML=todays.length?todays.map(x=>'<article class="person-row"><span class="person-avatar">'+esc((x.employee||"?").trim().charAt(0).toUpperCase())+'</span><div><strong>'+esc(x.employee)+'</strong><small>'+esc(x.category||"Equipe")+' · '+esc(x.shift||"Folga")+'</small></div><span class="person-tag">De folga</span></article>').join(""):'<div class="dashboard-empty"><span>✓</span><strong>Nenhuma folga programada para hoje</strong><p>Todos os funcionários estão disponíveis.</p></div>';
+  if($("#today-leaves"))$("#today-leaves").innerHTML=todays.length?todays.map(x=>'<article class="person-row"><span class="person-avatar">'+esc((x.employee||"?").trim().charAt(0).toUpperCase())+'</span><div><strong>'+esc(x.employee)+'</strong><small>'+esc(x.category||"Equipe")+' · '+esc(x.shift||"Folga")+'</small></div><span class="person-tag">De folga</span></article>').join(""):'<div class="dashboard-empty"><strong>Nenhuma folga programada para hoje</strong><p>Todos os funcionários estão disponíveis.</p></div>';
   const birthdays=employees.filter(e=>e.active&&e.birth_date&&e.birth_date.slice(5)===today.slice(5)).sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));
-  if($("#today-birthdays"))$("#today-birthdays").innerHTML=birthdays.length?birthdays.map(x=>'<article class="person-row birthday-row"><span class="person-avatar birthday-avatar">🎉</span><div><strong>'+esc(x.name)+'</strong><small>'+esc(x.category||"Nossa equipe")+'</small><p class="birthday-message">🎂 Parabéns pelo seu dia! Que seu novo ciclo seja repleto de saúde, alegria e conquistas!</p></div></article>').join(""):'<div class="dashboard-empty"><span>🎂</span><strong>Nenhum aniversariante hoje</strong><p>Quando houver aniversário, a comemoração aparecerá aqui.</p></div>';
+  if($("#today-birthdays"))$("#today-birthdays").innerHTML=birthdays.length?birthdays.map(x=>'<article class="person-row birthday-row"><span class="person-avatar birthday-avatar">🎉</span><div><strong>'+esc(x.name)+'</strong><small>'+esc(x.category||"Nossa equipe")+'</small><p class="birthday-message">🎂 Parabéns pelo seu dia! Que seu novo ciclo seja repleto de saúde, alegria e conquistas!</p></div></article>').join(""):'<div class="dashboard-empty"><strong>Nenhum aniversariante hoje</strong><p>Quando houver aniversário, a comemoração aparecerá aqui.</p></div>';
   fillSelect("#leave-employee-filter",employees.filter(e=>e.active),e=>e.name,"Selecione funcionário");
 
   fillSelect("#bank-employee",employees.filter(e=>e.active),e=>e.name);
@@ -128,7 +128,7 @@ async function refresh() {
     });
     table("#audit-list",["Data","Usuário","Ação","Entidade","ID","Detalhe"],audit.map(a=>[a.created_at,a.username,a.action,a.entity,a.entity_id??"—",a.detail||"—"]));
   }
-  $("#status").textContent="Conectado: "+window.__username+" ("+window.__role+")";
+  $("#status").textContent=window.__username;
  } catch(e) { $("#status").textContent="Falha ao carregar: "+(e.message||"verifique o servidor"); console.error("Falha ao atualizar MARKYS:",e); }
 }
 async function loadEmployee(id) {
