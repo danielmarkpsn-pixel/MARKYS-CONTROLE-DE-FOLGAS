@@ -491,3 +491,8 @@ body:has(#app-content:not(.hidden)) .app-sidebar,.app-sidebar{background:linear-
 .app-sidebar .tab,.app-sidebar summary,.sidebar-profile,.sidebar-footer{color:#142d49}.app-sidebar .tab.active{background:#e4faf6;color:#142d49}
 body:not(:has(#app-content:not(.hidden))){background:linear-gradient(150deg,#f5fffd,#a5e9df 65%,#42bfb1)}
 .login-panel,.registration-area{background:#fff;color:#142d49;border-color:#79cfc3}.login-panel h2,.login-panel label,.login-panel p{color:#142d49}.dashboard-unit-label{font-family:Espoir,"Bodoni MT",Didot,Georgia,serif;color:#142d49!important}
+
+/* Tipografia nativa Windows */
+:root,body,button,input,select,textarea,table{font-family:"Segoe UI",Tahoma,Arial,sans-serif!important}
+button,.app-sidebar .tab{font-weight:600}
+#dashboard-unit-label{font-family:Georgia,"Times New Roman",serif!important;font-weight:700;color:#142d49!important;text-shadow:1px 3px 5px #137e7533}
