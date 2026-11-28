@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
-import csv, hashlib, hmac, io, os, secrets
+import csv, hashlib, hmac, io, os, secrets, re
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -447,6 +447,8 @@ def build_employee_template():
     sheet.title = "Funcionários"
     sheet.append(IMPORT_HEADERS)
     sheet.freeze_panes = "A2"
+    from openpyxl.comments import Comment
+    sheet["D1"].comment = Comment("Informe 40 ou INTEGRAL 40H (08:00 A 12:00 - 13:00 A 17:00). No formato completo, deixe TURNO vazio.", "MARKYS")
     for column, width in zip("ABCDEF", (42, 20, 32, 20, 20, 22)):
         sheet.column_dimensions[column].width = width
     for row in range(2, 1002):
@@ -502,6 +504,16 @@ async def employee_import(request: Request, confirm: bool = False, user: User = 
                     birth = datetime.strptime(birth.strip(), "%d/%m/%Y").date()
                 if not isinstance(birth, date) or birth > date.today():
                     raise ValueError("Data de nascimento inválida.")
+                schedule = str(hours or "").strip().upper()
+                aliases = {"MANHÃ":"MANHÃ","MATUTINO":"MANHÃ","TARDE":"TARDE","VESPERTINO":"TARDE","INTEGRAL":"INTEGRAL","NOITE":"NOITE","NOTURNO":"NOITE"}
+                match = re.match(r"^(INTEGRAL|MANHÃ|MATUTINO|TARDE|VESPERTINO|NOITE|NOTURNO)\s+(\d{1,2})\s*H\b", schedule)
+                if match:
+                    extracted = aliases[match.group(1)]
+                    if shift and aliases.get(shift) != extracted:
+                        raise ValueError("Turno informado diverge da carga horária.")
+                    shift, hours = extracted, match.group(2)
+                else:
+                    shift = aliases.get(shift, shift)
                 if not category or shift not in {"MANHÃ", "TARDE", "NOITE", "INTEGRAL"}:
                     raise ValueError("Informe categoria e turno válido.")
                 if isinstance(hours, bool) or float(hours) != int(float(hours)) or not 1 <= int(float(hours)) <= 60:
