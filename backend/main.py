@@ -439,6 +439,16 @@ def get_employee(employee_id: int, user: User = Depends(admin_user), db: Session
     if not item: raise HTTPException(404, "Funcionário não encontrado.")
     return employee_private(item)
 
+def parse_import_schedule(hours, shift):
+    aliases = {"MANHÃ":"MANHÃ","MANHA":"MANHÃ","MATUTINO":"MANHÃ","TARDE":"TARDE","VESPERTINO":"TARDE","INTEGRAL":"INTEGRAL","NOITE":"NOITE","NOTURNO":"NOITE"}
+    shift = str(shift or "").strip().upper()
+    for value in (hours, shift):
+        schedule = str(value or "").strip().upper()
+        match = re.search(r"\b(INTEGRAL|MANHÃ|MANHA|MATUTINO|TARDE|VESPERTINO|NOITE|NOTURNO)\s*(\d{1,2})\s*H\b", schedule)
+        if match:
+            return int(match.group(2)), aliases[match.group(1)]
+    return hours, aliases.get(shift, shift)
+
 IMPORT_HEADERS = ("NOME", "NASCIMENTO", "CATEGORIA", "CARGA SEMANAL", "TURNO", "MATRÍCULA")
 
 def build_employee_template():
@@ -484,7 +494,8 @@ async def employee_import(request: Request, confirm: bool = False, user: User = 
     try:
         sheet = book.active
         iterator = sheet.iter_rows(values_only=True, max_col=6)
-        if tuple(next(iterator, ())) != IMPORT_HEADERS:
+        headers = tuple(str(v or "").strip().upper() for v in next(iterator, ()))
+        if headers != IMPORT_HEADERS and headers not in {("NOME","NASCIMENTO","CATEGORIA","JORNADA","MATRÍCULA",""), ("NOME","NASCIMENTO","CATEGORIA","CARGA HORÁRIA","MATRÍCULA","")}:
             raise HTTPException(422, "Use os cabeçalhos da planilha modelo.")
         for line, cells in enumerate(iterator, 2):
             if line > 10001:
@@ -495,6 +506,8 @@ async def employee_import(request: Request, confirm: bool = False, user: User = 
                 if any(isinstance(v, str) and v.startswith("=") for v in cells):
                     raise ValueError("Fórmulas não são permitidas.")
                 name, birth, category, hours, shift, registration = cells
+                if headers != IMPORT_HEADERS:
+                    registration, shift = shift, None
                 name, category, shift = [str(v or "").strip().upper() for v in (name, category, shift)]
                 registration = str(registration).strip().upper() if registration is not None else None
                 registration = registration or None
@@ -504,16 +517,7 @@ async def employee_import(request: Request, confirm: bool = False, user: User = 
                     birth = datetime.strptime(birth.strip(), "%d/%m/%Y").date()
                 if not isinstance(birth, date) or birth > date.today():
                     raise ValueError("Data de nascimento inválida.")
-                schedule = str(hours or "").strip().upper()
-                aliases = {"MANHÃ":"MANHÃ","MATUTINO":"MANHÃ","TARDE":"TARDE","VESPERTINO":"TARDE","INTEGRAL":"INTEGRAL","NOITE":"NOITE","NOTURNO":"NOITE"}
-                match = re.match(r"^(INTEGRAL|MANHÃ|MATUTINO|TARDE|VESPERTINO|NOITE|NOTURNO)\s+(\d{1,2})\s*H\b", schedule)
-                if match:
-                    extracted = aliases[match.group(1)]
-                    if shift and aliases.get(shift) != extracted:
-                        raise ValueError("Turno informado diverge da carga horária.")
-                    shift, hours = extracted, match.group(2)
-                else:
-                    shift = aliases.get(shift, shift)
+                hours, shift = parse_import_schedule(hours, shift)
                 if not category or shift not in {"MANHÃ", "TARDE", "NOITE", "INTEGRAL"}:
                     raise ValueError("Informe categoria e turno válido.")
                 if isinstance(hours, bool) or float(hours) != int(float(hours)) or not 1 <= int(float(hours)) <= 60:
