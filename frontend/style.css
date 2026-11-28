@@ -496,3 +496,5 @@ body:not(:has(#app-content:not(.hidden))){background:linear-gradient(150deg,#f5f
 :root,body,button,input,select,textarea,table{font-family:"Segoe UI",Tahoma,Arial,sans-serif!important}
 button,.app-sidebar .tab{font-weight:600}
 #dashboard-unit-label{font-family:Georgia,"Times New Roman",serif!important;font-weight:700;color:#142d49!important;text-shadow:1px 3px 5px #137e7533}
+
+.nav-svg img{display:block;width:24px;height:24px;object-fit:contain;filter:none!important}.dashboard-icon.nav-svg img{width:32px;height:32px}.unit-heading{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.unit-image{width:64px;height:64px;object-fit:contain}
