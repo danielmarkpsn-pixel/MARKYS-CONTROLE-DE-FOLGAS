@@ -536,3 +536,12 @@ body.sidebar-collapsed .sidebar-account .status,body.sidebar-collapsed #logout s
 body.sidebar-collapsed .sidebar-account{padding-right:6px}
 body.sidebar-collapsed .account-user,body.sidebar-collapsed #logout{justify-content:center;padding:8px 0}
 @media(max-width:900px){body:has(#app-content:not(.hidden)) main{grid-template-columns:200px minmax(0,1fr)}body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:72px minmax(0,1fr)}body.sidebar-collapsed .app-sidebar>:not(.sidebar-profile){display:revert}body.sidebar-collapsed .app-sidebar .sidebar-account{display:flex}}
+
+/* Ocupa toda a janela, com rodapé global independente da grade */
+body:has(#app-content:not(.hidden)){margin:0;height:100vh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+body:has(#app-content:not(.hidden)) main{flex:1 1 0;min-height:0;max-height:none;height:auto;grid-template-rows:minmax(0,1fr);align-items:stretch;margin:0;padding:0}
+body:has(#app-content:not(.hidden)) .app-sidebar{grid-column:1;grid-row:1;height:auto;min-height:0;align-self:stretch}
+body:has(#app-content:not(.hidden)) .workspace{grid-column:2;grid-row:1;min-height:0;height:auto;align-self:stretch;overflow:auto}
+body:has(#app-content:not(.hidden)) #dashboard{min-height:100%;box-sizing:border-box}
+body > .developer-credit{display:none}
+body:has(#app-content:not(.hidden)) > .developer-credit{display:block;flex:0 0 auto;width:100%;box-sizing:border-box;text-align:center;margin:0;padding:8px 12px;border-top:1px solid #d2e9e5;background:#fff;color:#526e6b;font-size:11px;line-height:16px}
