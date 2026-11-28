@@ -507,3 +507,32 @@ body .app-sidebar{background:#a5e9df!important;border-color:#42bfb1!important}
 #dashboard .dashboard-welcome h2{color:#142d49!important}
 #leave-center .leave-view{background:#f1faf8!important;border-color:#b6e4dc!important;color:#142d49!important}
 #leave-center .leave-view.active,#leave-center .leave-view:hover{background:#087f75!important;border-color:#087f75!important;color:#fff!important;box-shadow:0 4px 12px #087f7526!important}
+
+/* Sidebar com recorte branco contínuo e conta no rodapé */
+body:has(#app-content:not(.hidden)){height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body:has(#app-content:not(.hidden))>header{flex:0 0 auto}
+body:has(#app-content:not(.hidden)) main{flex:1;min-height:0;width:100%;grid-template-columns:240px minmax(0,1fr);background:#fff;overflow:hidden}
+body:has(#app-content:not(.hidden)) .app-sidebar{position:relative;top:0;height:100%;min-height:0;box-sizing:border-box;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding:16px 0 12px 12px;background:#65cfc2!important;border:0!important;gap:12px}
+.workspace{min-height:0;overflow:auto;box-sizing:border-box;padding:16px;background:#fff}
+#dashboard{box-sizing:border-box;min-height:100%;margin:0}
+.app-sidebar .sidebar-profile,.app-sidebar .sidebar-dropdown{border:0;padding-right:12px}
+.app-sidebar .sidebar-dropdown{padding-right:0}
+.app-sidebar .tab,.app-sidebar .sidebar-dropdown .tab{position:relative;isolation:isolate;width:100%;min-height:52px;display:flex;align-items:center;gap:12px;padding:12px 16px;border:0!important;border-radius:28px 0 0 28px;background:transparent!important;box-shadow:none!important;color:#142d49!important;transition:background .18s ease}
+.app-sidebar .tab.active,.app-sidebar .tab:hover,.app-sidebar .tab:focus-visible{background:#fff!important;box-shadow:none!important}
+.app-sidebar .tab.active::before,.app-sidebar .tab:hover::before,.app-sidebar .tab.active::after,.app-sidebar .tab:hover::after{content:"";position:absolute;right:0;width:18px;height:18px;pointer-events:none;background:transparent}
+.app-sidebar .tab.active::before,.app-sidebar .tab:hover::before{top:-18px;border-bottom-right-radius:18px;box-shadow:6px 6px 0 6px white}
+.app-sidebar .tab.active::after,.app-sidebar .tab:hover::after{bottom:-18px;border-top-right-radius:18px;box-shadow:6px -6px 0 6px white}
+.sidebar-account{margin-top:auto;padding:12px 12px 0 0;display:flex;flex-direction:column;gap:8px}
+.account-user{display:flex;align-items:center;gap:10px;min-width:0;padding:8px}
+.account-avatar{display:grid;place-items:center;flex:0 0 32px;height:32px;border-radius:50%;background:white;color:#087f75}
+.sidebar-account .status{background:transparent;border:0;box-shadow:none;color:#142d49;overflow-wrap:anywhere;min-width:0;padding:0}
+.sidebar-account #logout{display:flex;align-items:center;gap:12px;background:transparent;color:#142d49;border:0;box-shadow:none;padding:10px;border-radius:22px}
+.sidebar-account #logout:hover{background:white}
+.sidebar-account .sidebar-footer{margin:0;border:0;padding:8px;font-size:9px}
+body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:72px minmax(0,1fr)}
+body.sidebar-collapsed .app-sidebar{padding-left:6px}
+body.sidebar-collapsed .app-sidebar .tab{justify-content:center;padding:12px 6px;font-size:0}
+body.sidebar-collapsed .sidebar-account .status,body.sidebar-collapsed #logout span,body.sidebar-collapsed .sidebar-footer{display:none}
+body.sidebar-collapsed .sidebar-account{padding-right:6px}
+body.sidebar-collapsed .account-user,body.sidebar-collapsed #logout{justify-content:center;padding:8px 0}
+@media(max-width:900px){body:has(#app-content:not(.hidden)) main{grid-template-columns:200px minmax(0,1fr)}body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:72px minmax(0,1fr)}body.sidebar-collapsed .app-sidebar>:not(.sidebar-profile){display:revert}body.sidebar-collapsed .app-sidebar .sidebar-account{display:flex}}
