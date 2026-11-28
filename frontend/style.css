@@ -476,3 +476,11 @@ input::placeholder,textarea::placeholder{color:var(--muted)}table,td,th,tr{borde
 [data-theme="dark"] .brand-logo,[data-theme="dark"] .login-logo{background:#fff;border-radius:6px;padding:4px}
 .hidden{display:none!important}
 @media(max-width:900px){body:has(#app-content:not(.hidden)) main,body.sidebar-collapsed:has(#app-content:not(.hidden)) main{grid-template-columns:1fr}.workspace{padding:14px}.daily-metrics{gap:8px}.daily-metrics article{padding:10px}}
+
+/* Tema único verde-turquesa */
+:root{--bg:#f3faf9;--surface:#fff;--surface2:#f1f9f8;--ink:#172e2c;--muted:#526e6b;--line:#d2e9e5;--accent:#087f75;--selected:#d9f3ef;--blue:#087f75;--blue-soft:#d9f3ef;--navy:#12645e;--navy-2:#17877d;color-scheme:light}
+#dashboard{background:linear-gradient(180deg,#fff 0%,#fff 55%,#d8f5ef 80%,#77d9cb 100%);border:1px solid #d5ebe7;border-radius:16px;padding:24px;min-height:calc(100vh - 125px)}
+.dashboard-unit-label{font-size:clamp(23px,3vw,36px)!important;font-weight:800;letter-spacing:.2px;background:transparent!important;border:0!important;padding:0!important;color:#125b55!important;text-shadow:1px 3px 5px #137e7533;white-space:normal;line-height:1.2}
+.dashboard-welcome{padding:8px 0 22px}.dashboard-empty{min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}.dashboard-empty>span{display:none!important}
+.app-sidebar .tab.active,.app-sidebar .tab:hover,.leave-view.active{background:#d5f3ed;color:#125b55;border-color:#b6e4dc}.nav-svg,.dashboard-icon,.app-sidebar .nav-svg{color:#000!important}.nav-svg svg{stroke:currentColor}.dashboard-icon{background:#e2f5f1!important}
+button:not(.secondary):not(.tab):not(.leave-view),.login-submit{background:#087f75;border-color:#087f75;color:#fff;box-shadow:none}button:not(.secondary):not(.tab):not(.leave-view):hover{background:#066c64}input:focus,select:focus,textarea:focus{border-color:#159c91;outline-color:#159c91}.status{color:#125b55;background:#e2f5f1}.daily-metrics article,.dashboard-card{border-color:#d2e9e5}.eyebrow{color:#087f75!important}.app-sidebar .tab{color:#233d3a}.sidebar-status-dot{background:#159c91}
