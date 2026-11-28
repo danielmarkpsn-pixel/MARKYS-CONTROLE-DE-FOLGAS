@@ -545,3 +545,6 @@ body:has(#app-content:not(.hidden)) .workspace{grid-column:2;grid-row:1;min-heig
 body:has(#app-content:not(.hidden)) #dashboard{min-height:100%;box-sizing:border-box}
 body > .developer-credit{display:none}
 body:has(#app-content:not(.hidden)) > .developer-credit{display:block;flex:0 0 auto;width:100%;box-sizing:border-box;text-align:center;margin:0;padding:8px 12px;border-top:1px solid #d2e9e5;background:#fff;color:#526e6b;font-size:11px;line-height:16px}
+
+/* Rodape integral turquesa, sem linha divisoria */
+body:has(#app-content:not(.hidden)) > .developer-credit{display:flex!important;align-items:center;justify-content:center;align-self:stretch;width:100%!important;max-width:none!important;min-width:0;margin:0!important;padding:8px 12px!important;border:0!important;background:#65cfc2!important;color:#142d49!important;text-align:center!important;box-sizing:border-box;box-shadow:none!important}
