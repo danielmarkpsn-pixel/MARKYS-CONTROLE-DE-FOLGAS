@@ -201,7 +201,7 @@ table{font-size:12px}th{background:#edf4fa;color:#536e86}td{padding:10px 12px}
 /* Folgas: submenu vertical, botoes separados e seletor de funcionarios sempre visivel */
 #leave-center .leave-submenu{display:grid;grid-template-columns:1fr;gap:7px;width:100%;margin:16px 0 22px;padding:0;background:transparent;border:0;border-radius:0;}
 #leave-center .leave-view{display:flex;align-items:center;justify-content:flex-start;width:100%;min-height:42px;padding:11px 16px;border:1px solid #d5e1ed;border-radius:8px;background:#f7faff;color:#234b73;text-align:left;white-space:normal;}
-#leave-center .leave-view.active{background:#315f89;color:#fff;border-color:#315f89;box-shadow:inset 3px 0 #e4f0fb;}
+#leave-center .leave-view.active{background:#087f75;color:#fff;border-color:#087f75;box-shadow:inset 3px 0 #e4f0fb;}
 #leave-center .leave-employee-picker{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;margin:0 0 22px;padding:16px;background:#f7faff;border:1px solid #d5e1ed;border-radius:10px;}
 #leave-center .leave-employee-picker label{font-size:13px;color:#234b73;}
 #leave-center #leave-employee-search,#leave-center #leave-employee-filter{width:100%;min-height:44px;}
@@ -212,7 +212,7 @@ table{font-size:12px}th{background:#edf4fa;color:#536e86}td{padding:10px 12px}
 /* Menu de Folgas horizontal: cinco opcoes alinhadas lado a lado */
 #leave-center .leave-submenu{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;width:100%;margin:16px 0 22px;padding:0;background:transparent;border:0;border-radius:0;align-items:stretch;}
 #leave-center .leave-view{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;min-height:52px;padding:12px 10px;border:1px solid #d5e1ed;border-radius:9px;background:#f7faff;color:#234b73;text-align:center;white-space:normal;line-height:1.25;overflow-wrap:anywhere;}
-#leave-center .leave-view.active{background:#315f89;color:#fff;border-color:#315f89;box-shadow:0 4px 12px #234b7326;}
+#leave-center .leave-view.active{background:#087f75;color:#fff;border-color:#087f75;box-shadow:0 4px 12px #234b7326;}
 @media(max-width:900px){#leave-center .leave-submenu{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}}
 @media(max-width:560px){#leave-center .leave-submenu{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#leave-center .leave-view{min-height:46px;padding:10px 8px;font-size:11px}}
 
@@ -417,7 +417,7 @@ a,.lock-icon{color:#2869b2}
 
 /* MARKYS Oficial — paleta pastel e formulários compactos */
 :root{--blue:#326da8;--navy:#23466d;--line:#dce6f0;--ink:#243b53;--muted:#526b83}
-.app-sidebar{background:#dbeafe!important;color:#23466d;border-right:1px solid #c6d9ee;box-shadow:none}
+.app-sidebar{background:#a5e9df!important;color:#23466d;border-right:1px solid #c6d9ee;box-shadow:none}
 .sidebar-profile,.sidebar-dropdown,.sidebar-footer{border-color:#bcd1e8}
 .sidebar-profile strong,.sidebar-dropdown summary,.sidebar-footer,.sidebar-dropdown summary:after{color:#365777}
 .app-sidebar .tab,.sidebar-dropdown .tab{color:#23466d;background:transparent;box-shadow:none}
@@ -425,7 +425,7 @@ a,.lock-icon{color:#2869b2}
 .app-sidebar .tab.active,.sidebar-dropdown .tab.active{background:#b9d5f5;color:#173c64;box-shadow:inset 3px 0 #487db5}
 .nav-svg svg{width:20px;height:20px;display:block}.nav-svg{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .dashboard-icon.nav-svg svg{width:26px;height:26px}
-.dashboard-welcome{background:#eaf3ff!important;color:#23466d!important;border:1px solid #d1e3f5}
+.dashboard-welcome{background:#fff!important;color:#23466d!important;border:1px solid #d1e3f5}
 .dashboard-welcome h2,.dashboard-welcome p{color:#23466d!important}
 .dashboard-card{background:white!important;border:1px solid #dce6f0;box-shadow:none}
 .today-card .dashboard-icon{background:#dbeafe;color:#285e91}.birthday-card .dashboard-icon{background:#dcfce7;color:#23734d}
@@ -498,3 +498,12 @@ button,.app-sidebar .tab{font-weight:600}
 #dashboard-unit-label{font-family:Georgia,"Times New Roman",serif!important;font-weight:700;color:#142d49!important;text-shadow:1px 3px 5px #137e7533}
 
 .nav-svg img{display:block;width:24px;height:24px;object-fit:contain;filter:none!important}.dashboard-icon.nav-svg img{width:32px;height:32px}.unit-heading{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.unit-image{width:64px;height:64px;object-fit:contain}
+
+/* Ajustes definitivos solicitados no Windows */
+body .app-sidebar{background:#a5e9df!important;border-color:#42bfb1!important}
+.app-sidebar .tab,.app-sidebar .sidebar-dropdown .tab{display:flex;align-items:center;gap:10px;color:#142d49;border-color:#79cfc3}
+.app-sidebar .tab.active,.app-sidebar .tab:hover{background:#e4faf6!important;box-shadow:inset 3px 0 #087f75!important;color:#142d49!important}
+#dashboard .dashboard-welcome{background:#fff!important;border:0!important;box-shadow:none!important}
+#dashboard .dashboard-welcome h2{color:#142d49!important}
+#leave-center .leave-view{background:#f1faf8!important;border-color:#b6e4dc!important;color:#142d49!important}
+#leave-center .leave-view.active,#leave-center .leave-view:hover{background:#087f75!important;border-color:#087f75!important;color:#fff!important;box-shadow:0 4px 12px #087f7526!important}
