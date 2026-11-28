@@ -221,5 +221,6 @@ document.addEventListener("input",ev=>{const el=ev.target;if(!(el instanceof HTM
 
 /* Importação local e navegação */
 const iconPaths={home:'<path d="M3 10 12 3l9 7v10H3z"/><path d="M9 20v-7h6v7"/>',users:'<circle cx="9" cy="7" r="3"/><path d="M2 20v-3a7 7 0 0 1 14 0v3M17 4a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4"/>',gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13M12 8C3 8 5 0 9 4l3 4c9 0 7-8 3-4z"/>'};
-document.querySelectorAll("[data-icon]").forEach(el=>{el.innerHTML='<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+iconPaths[el.dataset.icon]+'</svg>';});
+const originalIcons={home:"INICIO.png",users:"FUNCIONARIOS.png",calendar:"CALENDARIO.png",lock:"ACESSOS.png",gift:"ANIVERSARIANTES.png",check:"CERTO.png"};
+document.querySelectorAll("[data-icon]").forEach(el=>{const file=originalIcons[el.dataset.icon];if(file){const img=document.createElement("img");img.src="/static/"+file;img.alt="";el.replaceChildren(img);}});
 $("#sidebar-toggle")?.addEventListener("click",()=>{const collapsed=document.body.classList.toggle("sidebar-collapsed");$("#sidebar-toggle").setAttribute("aria-expanded",String(!collapsed));$("#sidebar-toggle").setAttribute("aria-label",collapsed?"Expandir menu":"Recolher menu");});
